@@ -10,7 +10,7 @@ from sentry.testutils import TestCase
 from sentry.utils.committers import _get_commit_file_changes, _get_frame_paths, get_previous_releases, score_path_match_length, tokenize_path
 
 
-class CommitTest(TestCase):
+class CommitTestCase(TestCase):
     def setUp(self):
         self.repo = Repository.objects.create(
             organization_id=self.organization.id,
@@ -48,7 +48,7 @@ class CommitTest(TestCase):
         )
 
 
-class TokenizePath(TestCase):
+class TokenizePathTestCase(TestCase):
     def test_forward_slash(self):
         assert list(tokenize_path('foo/bar')) == ['bar', 'foo']
 
@@ -89,11 +89,11 @@ class ScorePathMatchLengthTest(TestCase):
         # TODO(lb): huh?
         assert score_path_match_length('foo/bar/baz', 'foo') == 0
 
-    def test_path_with_empty_path_segment():
+    def test_path_with_empty_path_segment(self):
         assert score_path_match_length('./foo/bar/baz', 'foo/bar/baz') == 3
 
 
-class GetFramePaths(TestCase):
+class GetFramePathsTestCase(TestCase):
     def setUp(self):
         self.event = Mock()
         self.event.data = {}
@@ -115,9 +115,9 @@ class GetFramePaths(TestCase):
         assert [] == _get_frame_paths(self.event)
 
 
-class GetCommitFileChanges(CommitTest):
+class GetCommitFileChangesTestCase(CommitTestCase):
     def setUp(self):
-        super(GetCommitFileChanges, self).setUp()
+        super(GetCommitFileChangesTestCase, self).setUp()
         file_change_1 = self.create_commitfilechange(filename='hello/app.py', type='A')
         file_change_2 = self.create_commitfilechange(filename='hello/templates/app.html', type='A')
         file_change_3 = self.create_commitfilechange(filename='hello/app.py', type='M')
@@ -139,13 +139,13 @@ class GetCommitFileChanges(CommitTest):
         assert _get_commit_file_changes(self.commits, self.path_name_set) == self.file_changes
 
 
-class MatchCommitsPath(CommitTest):
+class MatchCommitsPathTestCase(CommitTestCase):
     pass
 
 
-class GetCommitters(CommitTest):
+class GetCommittersTestCase(CommitTestCase):
     def setUp(self):
-        super(GetCommitFileChanges, self).setUp()
+        super(GetCommittersTestCase, self).setUp()
 
     def test_get_commits_committer(self):
         pass
@@ -154,7 +154,7 @@ class GetCommitters(CommitTest):
         pass
 
 
-class GetEventFileCommitters(TestCase):
+class GetEventFileCommittersTestCase(TestCase):
     pass
 
 
